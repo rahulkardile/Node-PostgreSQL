@@ -29,7 +29,6 @@ routes.post("/create-user", async (req: Request, res: Response, next: NextFuncti
 routes.get("/getUsers", async (req: Request, res: Response, next: NextFunction) => {
     try {
 
-        const { email, id } = req.body;
         const client = await getClient()
 
         const selectUserText = 'SELECT * FROM users';
@@ -50,6 +49,33 @@ routes.get("/getUsers", async (req: Request, res: Response, next: NextFunction) 
             message: "total user are " + allUsers.length,
             data: allUsers,
             raw
+        });
+
+    } catch (error) {
+        next(error);
+    }
+})
+
+routes.get("/get", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const { email, id } = req.body;
+        const client = await getClient();
+
+        const selectUserText = 'SELECT * FROM users WHERE email = $1';
+        const userRes = await client.query(selectUserText, [email]);
+
+        let userInfo;
+        for (let user of userRes.rows) {
+            userInfo = {
+                id: user.id,
+                email: user.email
+            }
+        }
+
+        res.status(200).json({
+            message: "login success",
+            data: userInfo
         });
 
     } catch (error) {
