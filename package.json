@@ -1,0 +1,18 @@
+{
+  "name": "sql-commands",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon dist/index.js",
+    "watch": "tsc -w",
+    "build": "tsc -b"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.21",
+    "@types/pg": "^8.10.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "pg": "^8.11.3"
+  }
+}
