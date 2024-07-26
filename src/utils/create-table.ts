@@ -1,4 +1,4 @@
-import { getClient } from "./utils/connectDb";
+import { getClient } from "./connectDb";
 
 export default async function createTable() {
     try {

@@ -1,7 +1,7 @@
 import express, { NextFunction, Request, Response } from "express"
 import dotenv from "dotenv"
 
-import createTable from "./create-table";
+import createTable from "./utils/create-table";
 import userRoute from './routes/routes.user'
 
 const app = express();
@@ -17,7 +17,7 @@ app.use("/api/user", userRoute);
 
 app.get("*", (req: Request, res: Response, next:NextFunction )=>{
     try {
-        res.status(404).json({success: true, message: "route not found"})
+        res.status(404).json({success: true, message: "route not found"});
     } catch (error) {
         next(error);
     }
