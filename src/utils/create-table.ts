@@ -10,14 +10,14 @@ export default async function createTable() {
                 password VARCHAR(255) NOT NULL
             );`;
 
-        await client.query(createUserTableQuery);
+        // await client.query(createUserTableQuery);
 
         const createTodoTable = `
             CREATE TABLE todos (
                 id SERIAL PRIMARY KEY,
                 title TEXT NOT NULL,
                 description TEXT,
-                user_id INTEGER REFERENCES users(id),
+                user_id INTEGER REFERENCES users(id) NOT NULL,
                 done BOOLEAN DEFAULT FALSE
             );`;
 
