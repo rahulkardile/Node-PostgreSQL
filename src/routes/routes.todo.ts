@@ -125,6 +125,7 @@ routes.delete("/delete", async (req: Request, res: Response, next: NextFunction)
                 next(err);
             });
 
+            
         } else {
             res.status(200).json({
                 success: true,
