@@ -85,7 +85,7 @@ routes.put("/update", async (req: Request, res: Response, next: NextFunction) =>
             }).catch((err) => {
                 next(err);
             });
-        
+
         } else {
             const selectUserId = 'UPDATE todos SET done = $1 WHERE id = $2';
 
@@ -96,6 +96,39 @@ routes.put("/update", async (req: Request, res: Response, next: NextFunction) =>
                 });
             }).catch((err) => {
                 next(err);
+            });
+        }
+    } catch (error) {
+        next(error);
+    }
+});
+
+routes.delete("/delete", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const todoId = req.query.todoId;
+        const client = await getClient();
+
+        const todoQuery = 'SELECT * FROM todos WHERE id = $1';
+        const getTodo: todo = (await client.query(todoQuery, [todoId])).rows[0];
+
+        if (getTodo) {
+
+            const selectTodoId = 'DELETE FROM todos WHERE id = $1';
+
+            await client.query(selectTodoId, [todoId]).then(() => { 
+                res.status(200).json({
+                    success: true,
+                    data: "todo deleted successfully!"
+                });
+            }).catch((err) => {
+                next(err);
+            });
+
+        } else {
+            res.status(200).json({
+                success: true,
+                data: "item not found"
             });
         }
     } catch (error) {
