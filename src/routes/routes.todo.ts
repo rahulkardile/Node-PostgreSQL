@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express"
 import { getClient } from "../utils/connectDb";
 import errorHandler from "../utils/errorHandler";
+import { todo } from "../types/types";
 
 const routes = express.Router();
 
@@ -59,6 +60,44 @@ routes.get("/get", async (req: Request, res: Response, next: NextFunction) => {
             data: userRes.rows
         })
 
+    } catch (error) {
+        next(error);
+    }
+});
+
+routes.put("/update", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+
+        const todoId = req.query.todoId;
+        const client = await getClient();
+
+        const todoQuery = 'SELECT * FROM todos WHERE id = $1';
+        const getTodo: todo = (await client.query(todoQuery, [todoId])).rows[0];
+
+        if (getTodo.done == false) {
+            const selectUserId = 'UPDATE todos SET done = $1 WHERE id = $2';
+
+            await client.query(selectUserId, [true, todoId]).then(() => {
+                res.status(200).json({
+                    success: true,
+                    data: "status is true now"
+                });
+            }).catch((err) => {
+                next(err);
+            });
+        
+        } else {
+            const selectUserId = 'UPDATE todos SET done = $1 WHERE id = $2';
+
+            await client.query(selectUserId, [false, todoId]).then(() => {
+                res.status(200).json({
+                    success: true,
+                    data: "status at false!"
+                });
+            }).catch((err) => {
+                next(err);
+            });
+        }
     } catch (error) {
         next(error);
     }
